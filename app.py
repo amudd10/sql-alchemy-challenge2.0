@@ -7,7 +7,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
-engine = create_engine("hawaii.sqlite")
+engine = create_engine("sqlite:///hawaii.sqlite")
 
 Base = automap_base()
 
@@ -75,10 +75,10 @@ def tobs():
 
     return jsonify(tobs)
 
-@app.route("/api/v1.0/<start>")
-def start_(start):
-    session = Session(engine)
-    
+# @app.route("/api/v1.0/<start>")
+# def start_(start):
+#     session = Session(engine)
+
 
 
 
