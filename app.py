@@ -75,12 +75,41 @@ def tobs():
 
     return jsonify(tobs)
 
-# @app.route("/api/v1.0/<start>")
-# def start_(start):
-#     session = Session(engine)
+@app.route("/api/v1.0/<start>")
+def starts(start):
+    start = dt.datetime.strptime(start)
+    user_input1 = start
+    session1 = Session(engine)
+    all_dates_q = session1.query(Measurement.date).all()
+    all_dates = list(np.ravel(all_dates_q))
+    # calculate TMIN, TAVG, TMAX for dates greater than start
+    start_data = session1.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= user_input1).all()
+    session1.close()
+    start_date_list = list(np.ravel(start_data))
+    start_dict = {"TMIN": start_date_list[0]}, {"TMAX": start_date_list[1]}, {"TAVG": start_date_list[2]}
+    if user_input1 not in all_dates:
+        return jsonify({"Error": "Input date not found"})
+    else:
+        return jsonify(start_dict)
 
-
-
+@app.route("/api/v1.0/<start>/<end>")
+def start_end(start,end):
+    start = dt.datetime.strptime(start)
+    end = dt.datetime.strptime(end)
+    user_input2 = start
+    user_input3 = end
+    session2 = Session(engine)
+    all_dates_r = session2.query(Measurement.date).all()
+    all_dates2 = list(np.ravel(all_dates_r))
+    # calculate TMIN, TAVG, TMAX for dates greater than start
+    start_end_data = session2.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= user_input2).filter(Measurement.date <=user_input3).all()
+    session2.close()
+    start_end_datelist = list(np.ravel(start_end_data))
+    start_end_dict =  {"TMIN": start_end_datelist[0]}, {"TMAX": start_end_datelist[1]}, {"TAVG": start_end_datelist[2]}
+    if (user_input2 or user_input3) not in start_end_datelist:
+        return jsonify({"Error": "Input date(s) not found"})
+    else:
+        return jsonify(start_end_dict)
 
 
 
