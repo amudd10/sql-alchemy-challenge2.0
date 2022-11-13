@@ -29,8 +29,8 @@ def home():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<start><br/>"
-        f"/api/v1.0/<start>/<end>"
+        f"/api/v1.0/start<br/>"
+        f"/api/v1.0/start/end"
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -77,7 +77,6 @@ def tobs():
 
 @app.route("/api/v1.0/<start>")
 def starts(start):
-    start = dt.datetime.strptime(start)
     user_input1 = start
     session1 = Session(engine)
     all_dates_q = session1.query(Measurement.date).all()
@@ -94,8 +93,6 @@ def starts(start):
 
 @app.route("/api/v1.0/<start>/<end>")
 def start_end(start,end):
-    start = dt.datetime.strptime(start)
-    end = dt.datetime.strptime(end)
     user_input2 = start
     user_input3 = end
     session2 = Session(engine)
